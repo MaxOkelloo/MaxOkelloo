@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=yes">
+  <title>iMAX Property Ltd | Premium Real Estate</title>
+
+  <!-- Professional Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: #ffffff;
+      color: #1a1a2e;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .logo-font,
+    .tag,
+    .nav-links a {
+      font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .container {
+      max-width: 1290px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .animate-fade-up {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .animate-fade-left {
+      animation: fadeInLeft 0.8s ease-out;
+    }
+
+    .animate-fade-right {
+      animation: fadeInRight 0.8s ease-out;
+    }
+
+    .animate-scale {
+      animation: scaleIn 0.6s ease-out;
+    }
+
+    .delay-1 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.4s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.6s;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo h1 {
+      font-size: clamp(1.3rem, 5vw, 1.8rem);
+      margin-bottom: 0;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1a1a2e 0%, #c49a6c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo span {
+      font-size: clamp(0.65rem, 3vw, 0.75rem);
+      color: #c49a6c;
+      display: block;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: #c49a6c;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+
+    .mobile-menu-btn:hover {
+      background: #a87b4e;
+      transform: scale(1.05);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(1rem, 4vw, 2rem);
+      list-style: none;
+    }
+
+    .nav-links li {
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #1a1a2e;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      display: inline-block;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #c49a6c;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: #c49a6c;
+      transform: translateY(-2px);
+    }
+
+    .btn-primary,
+    .btn-outline {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      background: #c49a6c;
+      color: white;
+      box-shadow: 0 4px 15px rgba(196, 154, 108, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: #a87b4e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(196, 154, 108, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #c49a6c;
+      color: #c49a6c;
+    }
+
+    .btn-outline:hover {
+      background: #c49a6c;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #F8F6F2 0%, #EFEAE3 100%);
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(196, 154, 108, 0.08) 0%, transparent 70%);
+      animation: rotate 25s linear infinite;
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hero-grid {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .hero-content {
+      flex: 1.2;
+    }
+
+    .hero-image {
+      flex: 1;
+      height: auto;
+      min-height: 350px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 24px;
+      transition: transform 0.5s ease;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-image:hover {
+      transform: scale(1.02);
+    }
+
+    .tag {
+      color: #c49a6c;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: clamp(0.7rem, 3vw, 0.8rem);
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    /* Home Page Buttons */
+    .nav-buttons {
+      display: flex;
+      gap: 16px;
+      margin: 28px 0;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: rgba(196, 154, 108, 0.1);
+      border: 1px solid #c49a6c;
+      padding: 12px 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .nav-btn:hover {
+      background: #c49a6c;
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(196, 154, 108, 0.3);
+    }
+
+    /* Properties Section */
+    .properties-section {
+      padding: clamp(3rem, 10vw, 80px) 0;
+    }
+
+    .property-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .property-card-horizontal {
+      display: flex;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transition: all 0.4s ease;
+      border: 1px solid #f0ebe3;
+    }
+
+    .property-card-horizontal:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-horizontal {
+      flex: 1.2;
+      min-width: 280px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      transition: transform 0.5s ease;
+    }
+
+    .property-card-horizontal:hover .card-img-horizontal {
+      transform: scale(1.02);
+    }
+
+    .card-content-horizontal {
+      flex: 2;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-content-horizontal h3 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+      color: #1a1a2e;
+    }
+
+    .location {
+      color: #c49a6c;
+      font-weight: 500;
+      margin: 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 12px 0;
+      padding: 12px 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      font-size: 0.85rem;
+      color: #4a4a6a;
+    }
+
+    .features span i {
+      margin-right: 6px;
+      color: #c49a6c;
+    }
+
+    .price {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 12px 0;
+      color: #c49a6c;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .status-available {
+      background: #28a745;
+      color: white;
+    }
+
+    .status-sold {
+      background: #dc3545;
+      color: white;
+    }
+
+    .status-pending {
+      background: #ffc107;
+      color: #1e2a3e;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 50px;
+      font-size: 1rem;
+      color: #c49a6c;
+    }
+
+    /* Admin Panel */
+    .admin-dashboard-wrapper {
+      min-height: 60vh;
+      padding: 40px 0;
+    }
+
+    .admin-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .admin-header-bar {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 16px;
+      min-width: 600px;
+    }
+
+    .admin-table th,
+    .admin-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    .admin-table th {
+      background: #1a1a2e;
+      color: white;
+      font-weight: 600;
+    }
+
+    .admin-table tr:hover {
+      background: #f8f6f2;
+    }
+
+    .btn-edit,
+    .btn-delete {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      margin: 0 4px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s;
+    }
+
+    .btn-edit {
+      background: #c49a6c;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #a87b4e;
+      transform: translateY(-2px);
+    }
+
+    .btn-delete {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #c49a6c;
+      box-shadow: 0 0 0 3px rgba(196, 154, 108, 0.1);
+    }
+
+    /* Image Upload */
+    .image-upload-area {
+      border: 2px dashed #c49a6c;
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #fef9f5;
+    }
+
+    .image-upload-area:hover {
+      background: #f0ebe3;
+      transform: scale(1.01);
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      color: #c49a6c;
+      margin-bottom: 10px;
+    }
+
+    .image-preview {
+      margin-top: 20px;
+      display: none;
+      text-align: center;
+    }
+
+    .image-preview img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 12px;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      width: 100%;
+      background: #f0f0f0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 15px 0;
+      display: none;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 6px;
+      background: #c49a6c;
+      transition: width 0.3s;
+    }
+
+    /* Login */
+    .login-container {
+      max-width: min(90%, 450px);
+      margin: 100px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .error-msg {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .success-msg {
+      background: #d4edda;
+      color: #155724;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 24px;
+      max-width: min(90%, 500px);
+      width: 100%;
+    }
+
+    /* About Page */
+    .about-section {
+      padding: clamp(3rem, 8vw, 80px) 0;
+    }
+
+    .about-grid {
+      display: flex;
+      gap: 60px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .about-content {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .about-image {
+      flex: 1;
+      min-width: 280px;
+      height: clamp(250px, 50vw, 400px);
+      border-radius: 24px;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.5s;
+    }
+
+    .about-image:hover {
+      transform: scale(1.02);
+    }
+
+    .stats-container {
+      display: flex;
+      gap: 36px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .stat-number {
+      color: #c49a6c;
+      font-size: clamp(1.5rem, 6vw, 2rem);
+      font-weight: 700;
+    }
+
+    /* Contact Page */
+    .contact-section {
+      padding: clamp(3rem, 8vw, 80px) 0;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+    }
+
+    .contact-grid {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .contact-info {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .contact-form-wrapper {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .contact-form-card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: clamp(1.5rem, 5vw, 2rem);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s;
+    }
+
+    .contact-form-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #c49a6c;
+      transform: translateX(5px);
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 14px 0;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .contact-item:hover {
+      transform: translateX(10px);
+    }
+
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(196, 154, 108, 0.12);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .contact-item:hover .contact-icon {
+      background: #c49a6c;
+      transform: scale(1.1);
+    }
+
+    .contact-item:hover .contact-icon i {
+      color: white;
+    }
+
+    /* Footer */
+    .footer {
+      background: #0f1a24;
+      padding: 60px 0 30px;
+      color: #9aaebf;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h4 {
+      color: white;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .footer-col h4::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: #c49a6c;
+    }
+
+    .footer-col p {
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 12px;
+    }
+
+    .footer-col ul li a {
+      color: #9aaebf;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .footer-col ul li a:hover {
+      color: #c49a6c;
+      transform: translateX(5px);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .social-links a:hover {
+      background: #c49a6c;
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+      }
+
+      .nav-links.show {
+        display: flex;
+      }
+
+      .hero-grid {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .property-card-horizontal {
+        flex-direction: column;
+      }
+
+      .card-img-horizontal {
+        height: 250px;
+        min-width: 100%;
+        width: 100%;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .footer-col h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+
+      .nav-buttons {
+        justify-content: center;
+      }
+
+      .nav-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="container">
+      <div class="navbar">
+        <div class="logo" data-aos="fade-right">
+          <h1>iMAX Property Ltd</h1>
+          <span>EST. 2012 · PREMIUM REAL ESTATE</span>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="mainNavLinks">
+          <li><a href="#" data-page="home" class="active">Home</a></li>
+          <li><a href="#" data-page="properties">Properties</a></li>
+          <li><a href="#" data-page="about">About</a></li>
+          <li><a href="#" data-page="contact">Contact</a></li>
+          <li><a href="#" data-page="admin" id="adminNavLink"><i class="fas fa-lock"></i> Admin</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME PAGE -->
+    <div id="homePage" class="page active">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-content" data-aos="fade-right">
+            <span class="tag">Luxury real estate</span>
+            <h1>Where vision meets <br>prestige property</h1>
+            <p>iMAX Property Ltd delivers exclusive residential & commercial estates. Tailored solutions for investors,
+              homeowners, and global buyers.</p>
+            <div class="nav-buttons">
+              <button class="nav-btn" onclick="window.navigateTo('properties')"><i class="fas fa-home"></i>
+                Properties</button>
+              <button class="nav-btn" onclick="window.navigateTo('about')"><i class="fas fa-chart-line"></i> About
+                Us</button>
+              <button class="nav-btn" onclick="window.navigateTo('contact')"><i class="fas fa-envelope"></i>
+                Contact</button>
+            </div>
+            <button class="btn-primary" onclick="window.navigateTo('properties')">Explore Properties <i
+                class="fas fa-arrow-right"></i></button>
+          </div>
+          <div class="hero-image" data-aos="fade-left"
+            style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop');">
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PROPERTIES PAGE -->
+    <div id="propertiesPage" class="page">
+      <section class="properties-section">
+        <div class="container">
+          <h2 style="text-align: center;" data-aos="fade-up">Signature Listings</h2>
+          <p class="section-subhead" style="margin: 0 auto 40px; text-align: center;" data-aos="fade-up"
+            data-aos-delay="100">Curated properties that reflect iMAX excellence</p>
+          <div id="properties-container" class="property-list">
+            <div class="loading"><i class="fas fa-spinner fa-pulse"></i> Loading properties...</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div id="aboutPage" class="page">
+      <section class="about-section">
+        <div class="container">
+          <div class="about-grid">
+            <div class="about-content" data-aos="fade-right">
+              <h2>Beyond traditional real estate</h2>
+              <p style="margin-bottom: 20px;">iMAX Property Ltd has consistently set new standards in high-end property
+                advisory. With a global network and white-glove service, we represent sellers and buyers in the world's
+                most desirable locations.</p>
+              <div class="stats-container">
+                <div data-aos="zoom-in" data-aos-delay="100">
+                  <div class="stat-number">320+</div>
+                  <div>Properties sold</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="200">
+                  <div class="stat-number">£2.1B+</div>
+                  <div>Transaction value</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="300">
+                  <div class="stat-number">14</div>
+                  <div>Global awards</div>
+                </div>
+              </div>
+            </div>
+            <div class="about-image" data-aos="fade-left"
+              style="background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop');">
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contactPage" class="page">
+      <section class="contact-section">
+        <div class="container">
+          <div class="contact-grid">
+            <div class="contact-info" data-aos="fade-right">
+              <h3 class="contact-title">Get In Touch</h3>
+              <p class="contact-description">We're here to help you find your dream property. Reach out to us anytime.
+              </p>
+              <div class="contact-item" onclick="window.openEmail()">
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <div>
+                  <h4 style="color: white;">Email Us</h4>
+                  <p style="opacity: 0.7;">okellomaxwelotieno@gmail.com</p>
+                </div>
+              </div>
+              <div class="contact-item" onclick="window.openWhatsApp()">
+                <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+                <div>
+                  <h4 style="color: white;">WhatsApp</h4>
+                  <p style="opacity: 0.7;">+254 702 332 928</p>
+                </div>
+              </div>
+              <div class="contact-item" onclick="window.openPhone()">
+                <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                <div>
+                  <h4 style="color: white;">Call Us</h4>
+                  <p style="opacity: 0.7;">+254 702 332 928</p>
+                </div>
+              </div>
+            </div>
+            <div class="contact-form-wrapper" data-aos="fade-left">
+              <div class="contact-form-card">
+                <h4 style="margin-bottom: 20px;">Send us a message</h4>
+                <input type="text" id="quickName" class="form-input" placeholder="Your Name">
+                <input type="email" id="quickEmail" class="form-input" placeholder="Your Email">
+                <textarea id="quickMessage" rows="4" class="form-textarea" placeholder="Your Message"></textarea>
+                <button class="btn-primary" style="width:100%; margin-bottom:10px;"
+                  onclick="window.sendViaWhatsApp()"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
+                <button class="btn-outline"
+                  style="width:100%; background:rgba(255,255,255,0.1); border-color:white; color:white;"
+                  onclick="window.sendViaEmail()"><i class="fas fa-envelope"></i> Send via Email</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ADMIN LOGIN PAGE -->
+    <div id="adminLoginPage" class="page">
+      <div class="login-container" data-aos="zoom-in">
+        <div class="logo" style="margin-bottom: 20px;">
+          <h1 style="font-size: 1.8rem;">iMAX Property Ltd</h1>
+          <span style="color: #c49a6c;">Admin Panel</span>
+        </div>
+        <div id="loginErrorMsg" class="error-msg"></div>
+        <form id="loginForm">
+          <div class="form-group"><label>Email</label><input type="email" id="loginEmail" required
+              placeholder="admin@imaxproperty.com"></div>
+          <div class="form-group"><label>Password</label><input type="password" id="loginPassword" required
+              placeholder="••••••••"></div>
+          <button type="submit" class="btn-primary" style="width: 100%;">Login <i
+              class="fas fa-arrow-right"></i></button>
+        </form>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: #6c757d;">Demo: admin@imaxproperty.com / admin123</p>
+      </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD PAGE -->
+    <div id="adminDashboardPage" class="page">
+      <div class="admin-header-bar">
+        <div class="container">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <div>
+              <h1 style="font-size: 1.8rem; color: #1a1a2e;">Admin Dashboard</h1>
+              <p style="color: #666;">Manage your property listings</p>
+            </div>
+            <div>
+              <button id="showAddPropertyBtn" class="btn-success"><i class="fas fa-plus"></i> Add New Property</button>
+              <button id="adminLogoutBtn" class="btn-danger" style="margin-left: 10px;"><i
+                  class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="admin-dashboard-wrapper">
+        <div class="admin-container">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
+            <h2>All Properties</h2>
+            <input type="text" id="searchInputAdmin" placeholder="Search by title or location..."
+              style="padding: 12px 18px; border-radius: 50px; border: 1px solid #ddd; width: 280px;">
+          </div>
+          <div id="propertiesTableContainer">
+            <div class="loading">Loading properties...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD/EDIT PROPERTY FORM -->
+    <div id="propertyFormPage" class="page">
+      <div class="admin-container" style="max-width: 800px; margin: 40px auto;">
+        <button id="backToDashboardBtn" class="btn-outline" style="margin-bottom: 20px;"><i
+            class="fas fa-arrow-left"></i> Back to Dashboard</button>
+        <div
+          style="background: white; padding: clamp(1.5rem, 5vw, 40px); border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+          <h2 id="formTitle" style="margin-bottom: 30px;">Add New Property</h2>
+          <div id="formErrorMsg" class="error-msg"></div>
+          <div id="formSuccessMsg" class="success-msg"></div>
+          <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <form id="propertyForm">
+            <input type="hidden" id="propertyId">
+            <div class="form-group"><label>Property Title *</label><input type="text" id="propTitle" required></div>
+            <div class="form-group"><label>Location *</label><input type="text" id="propLocation" required></div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 20px;">
+              <div class="form-group"><label>Bedrooms</label><input type="number" id="propBedrooms" value="3"></div>
+              <div class="form-group"><label>Bathrooms</label><input type="number" id="propBathrooms" value="2"></div>
+              <div class="form-group"><label>Area (sqft)</label><input type="number" id="propArea" value="2000"></div>
+            </div>
+            <div class="form-group"><label>Price *</label><input type="text" id="propPrice" required
+                placeholder="£3,950,000"></div>
+            <div class="form-group">
+              <label>Property Image</label>
+              <div id="imageUploadArea" class="image-upload-area">
+                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <div>Click or drag & drop an image here</div>
+                <div style="font-size: 0.8rem; margin-top: 5px;">Supports: JPG, PNG, GIF (Max 2MB)</div>
+                <input type="file" id="imageFile" accept="image/*" style="display: none;">
+              </div>
+              <div id="imagePreview" class="image-preview"><img id="previewImg" src=""><button type="button"
+                  id="removeImageBtn" class="btn-outline" style="margin-top: 10px;">Remove Image</button></div>
+            </div>
+            <div class="form-group"><label>Description</label><textarea id="propDescription" rows="4"></textarea></div>
+            <div class="form-group"><label>Status</label><select id="propStatus">
+                <option value="available">Available</option>
+                <option value="sold">Sold</option>
+                <option value="pending">Pending</option>
+              </select></div>
+            <button type="submit" class="btn-primary" style="width: 100%;" id="submitPropertyBtn">Add Property <i
+                class="fas fa-plus"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER WITH QUICK LINKS -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col" data-aos="fade-up">
+          <h4>iMAX Property Ltd</h4>
+          <p>Premium real estate solutions since 2012. We connect discerning buyers with exceptional properties across
+            Kenya's most desirable locations.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-col" data-aos="fade-up" data-aos-delay="100">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a onclick="window.navigateTo('home')">Home</a></li>
+            <li><a onclick="window.navigateTo('properties')">Properties</a></li>
+            <li><a onclick="window.navigateTo('about')">About Us</a></li>
+            <li><a onclick="window.navigateTo('contact')">Contact</a></li>
+            <li><a onclick="window.navigateTo('admin')">Admin Panel</a></li>
+          </ul>
+        </div>
+        <div class="footer-col" data-aos="fade-up" data-aos-delay="200">
+          <h4>Our Vision</h4>
+          <p>To be the most trusted and innovative real estate partner in East Africa, setting benchmarks for
+            excellence, transparency, and client satisfaction.</p>
+        </div>
+        <div class="footer-col" data-aos="fade-up" data-aos-delay="300">
+          <h4>Our Mission</h4>
+          <p>To deliver exceptional property solutions through integrity, market expertise, and personalized service,
+            creating lasting value for our clients and communities.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 iMAX Property Ltd — All rights reserved. A premium real estate brand.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h3>Confirm Delete</h3>
+      <p>Are you sure you want to delete this property? This action cannot be undone.</p>
+      <div class="modal-buttons">
+        <button class="btn-outline" onclick="window.closeDeleteModal()">Cancel</button>
+        <button id="confirmDeleteBtn" class="btn-primary" style="background: #dc3545;">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDEX1wzzB-5sQC2K_9u083iSyoV0C9Xx-M",
+      authDomain: "imax-property-ltd.firebaseapp.com",
+      projectId: "imax-property-ltd",
+      storageBucket: "imax-property-ltd.firebasestorage.app",
+      messagingSenderId: "182388096123",
+      appId: "1:182388096123:web:8c2ebaf534681b06d7b6de"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    let currentUser = null;
+    let properties = [];
+    let deleteId = null;
+    let isEditMode = false;
+    let selectedImageData = null;
+
+    const WHATSAPP_NUMBER = "254702332928";
+    const COMPANY_EMAIL = "okellomaxwelotieno@gmail.com";
+    const COMPANY_PHONE = "254702332928";
+    const DEFAULT_IMAGE = "https://placehold.co/600x400/f0ebe3/9e7f5e?text=Property+Image";
+
+    // Navigation Functions - Make them global
+    window.navigateTo = function (pageName) {
+      console.log('Navigating to:', pageName);
+      showPage(pageName + 'Page');
+    };
+
+    function showPage(pageId) {
+      console.log('Showing page:', pageId);
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) targetPage.classList.add('active');
+
+      document.querySelectorAll('#mainNavLinks a').forEach(link => {
+        link.classList.remove('active');
+        const pageName = link.getAttribute('data-page');
+        if (pageName === 'admin' && pageId === 'adminDashboardPage') {
+          link.classList.add('active');
+        } else if (pageName && pageId === pageName + 'Page') {
+          link.classList.add('active');
+        } else if (pageName === 'admin' && pageId === 'adminLoginPage') {
+          link.classList.add('active');
+        }
+      });
+
+      if (pageId === 'propertiesPage') loadProperties();
+      else if (pageId === 'adminDashboardPage' && currentUser) loadAdminProperties();
+    }
+
+    // Contact Functions - Make them global
+    window.openWhatsApp = function () {
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=Hello%20iMAX%20Property%2C%20I%27m%20interested%20in%20your%20properties.`, '_blank');
+    };
+    window.openEmail = function () {
+      window.location.href = `mailto:${COMPANY_EMAIL}?subject=Property%20Enquiry%20-%20iMAX%20Property`;
+    };
+    window.openPhone = function () {
+      window.location.href = `tel:+${COMPANY_PHONE}`;
+    };
+    window.sendViaWhatsApp = function () {
+      const name = document.getElementById('quickName')?.value || 'Guest';
+      const msg = document.getElementById('quickMessage')?.value || '';
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=*Enquiry*%0AName: ${name}%0AMessage: ${msg}`, '_blank');
+    };
+    window.sendViaEmail = function () {
+      const name = document.getElementById('quickName')?.value || '';
+      const email = document.getElementById('quickEmail')?.value || '';
+      const msg = document.getElementById('quickMessage')?.value || '';
+      window.location.href = `mailto:${COMPANY_EMAIL}?subject=Enquiry from ${name}&body=${msg}%0A%0AReply to: ${email}`;
+    };
+
+    // Mobile Menu
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navLinksElem = document.getElementById('mainNavLinks');
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', () => {
+        navLinksElem.classList.toggle('show');
+        const icon = mobileMenuBtn.querySelector('i');
+        if (navLinksElem.classList.contains('show')) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        } else {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      });
+    }
+
+    // Navigation Link Handlers
+    document.querySelectorAll('#mainNavLinks a').forEach(link => {
+      link.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const pageName = link.getAttribute('data-page');
+        console.log('Link clicked:', pageName);
+
+        if (currentUser && pageName !== 'admin' && pageName !== 'dashboard') {
+          await auth.signOut();
+          currentUser = null;
+          const adminLink = document.getElementById('adminNavLink');
+          if (adminLink) {
+            adminLink.innerHTML = '<i class="fas fa-lock"></i> Admin';
+            adminLink.setAttribute('data-page', 'admin');
+          }
+        }
+
+        if (pageName === 'admin') {
+          if (currentUser) {
+            showPage('adminDashboardPage');
+            loadAdminProperties();
+          } else {
+            showPage('adminLoginPage');
+          }
+        } else if (pageName) {
+          showPage(pageName + 'Page');
+        }
+      });
+    });
+
+    // Auth State Listener
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      const adminLink = document.getElementById('adminNavLink');
+      if (adminLink) {
+        if (user) {
+          adminLink.innerHTML = '<i class="fas fa-chart-line"></i> Dashboard';
+          adminLink.setAttribute('data-page', 'dashboard');
+        } else {
+          adminLink.innerHTML = '<i class="fas fa-lock"></i> Admin';
+          adminLink.setAttribute('data-page', 'admin');
+        }
+      }
+    });
+
+    // Login Form
+    document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const errorDiv = document.getElementById('loginErrorMsg');
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        errorDiv.style.display = 'none';
+        showPage('adminDashboardPage');
+        loadAdminProperties();
+      } catch (error) {
+        errorDiv.textContent = error.message;
+        errorDiv.style.display = 'block';
+      }
+    });
+
+    // Logout
+    document.getElementById('adminLogoutBtn')?.addEventListener('click', async () => {
+      await auth.signOut();
+      showPage('homePage');
+    });
+
+    // Image Upload Handling
+    const uploadArea = document.getElementById('imageUploadArea');
+    const imageFileInput = document.getElementById('imageFile');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+
+    if (uploadArea) {
+      uploadArea.addEventListener('click', () => imageFileInput.click());
+      uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.background = '#e8dfd3'; });
+      uploadArea.addEventListener('dragleave', () => { uploadArea.style.background = '#fef9f5'; });
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.background = '#fef9f5';
+        const file = e.dataTransfer.files[ 0 ];
+        if (file && file.type.startsWith('image/')) handleImageFile(file);
+        else alert('Please drop an image file');
+      });
+    }
+
+    imageFileInput?.addEventListener('change', (e) => { if (e.target.files[ 0 ]) handleImageFile(e.target.files[ 0 ]); });
+
+    function handleImageFile(file) {
+      if (file.size > 2 * 1024 * 1024) { alert('Image must be less than 2MB'); return; }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        selectedImageData = e.target.result;
+        previewImg.src = selectedImageData;
+        imagePreview.style.display = 'block';
+        uploadArea.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    document.getElementById('removeImageBtn')?.addEventListener('click', () => {
+      selectedImageData = null;
+      imagePreview.style.display = 'none';
+      uploadArea.style.display = 'block';
+      imageFileInput.value = '';
+    });
+
+    // Load Properties for Public View - WITH REAL-TIME LISTENER
+    let unsubscribeProperties = null;
+
+    function loadProperties() {
+      const container = document.getElementById('properties-container');
+      if (!container) return;
+
+      // Set up real-time listener if not already set
+      if (unsubscribeProperties) {
+        unsubscribeProperties();
+      }
+
+      container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-pulse"></i> Loading properties...</div>';
+
+      // Real-time listener for properties collection
+      unsubscribeProperties = db.collection('properties').orderBy('createdAt', 'desc')
+        .onSnapshot((snapshot) => {
+          if (snapshot.empty) {
+            container.innerHTML = '<div class="loading">No properties yet. Check back soon!</div>';
+            return;
+          }
+
+          let html = '';
+          snapshot.forEach(doc => {
+            const p = doc.data();
+            const imageUrl = p.image_data || DEFAULT_IMAGE;
+            const statusClass = p.status === 'available' ? 'status-available' : (p.status === 'sold' ? 'status-sold' : 'status-pending');
+
+            html += `<div class="property-card-horizontal" data-aos="fade-up">
+              <div class="card-img-horizontal" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;">
+                <span class="status-badge ${statusClass}" style="position: absolute; top: 15px; left: 15px;">${p.status}</span>
+              </div>
+              <div class="card-content-horizontal">
+                <div>
+                  <h3>${escapeHtml(p.title)}</h3>
+                  <div class="location"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(p.location)}</div>
+                  <div class="features">
+                    <span><i class="fas fa-bed"></i> ${p.bedrooms} beds</span>
+                    <span><i class="fas fa-bath"></i> ${p.bathrooms} baths</span>
+                    <span><i class="fas fa-vector-square"></i> ${p.area} sqft</span>
+                  </div>
+                  <div class="price">${escapeHtml(p.price)}</div>
+                  <div class="description-preview">${escapeHtml(p.description) || 'Experience modern living in this beautifully designed home.'}</div>
+                </div>
+                <button class="btn-outline" style="margin-top: 15px; padding: 8px 20px; align-self: flex-start;" onclick="window.openWhatsApp()">
+                  <i class="fab fa-whatsapp"></i> Enquire Now
+                </button>
+              </div>
+            </div>`;
+          });
+          container.innerHTML = html;
+
+          // Refresh AOS animations for new elements
+          if (typeof AOS !== 'undefined') {
+            AOS.refresh();
+          }
+        }, (error) => {
+          console.error('Error loading properties:', error);
+          container.innerHTML = '<div class="loading">Error loading properties. Please refresh.</div>';
+        });
+    }
+
+    // Load Properties for Admin
+    async function loadAdminProperties() {
+      const container = document.getElementById('propertiesTableContainer');
+      if (!container) return;
+      container.innerHTML = '<div class="loading">Loading properties...</div>';
+      try {
+        const snapshot = await db.collection('properties').orderBy('createdAt', 'desc').get();
+        properties = [];
+        snapshot.forEach(doc => properties.push({ id: doc.id, ...doc.data() }));
+        renderPropertiesTable(properties);
+      } catch (error) {
+        console.error('Error:', error);
+        container.innerHTML = '<div class="loading">Error loading properties</div>';
+      }
+    }
+
+    function renderPropertiesTable(data) {
+      const container = document.getElementById('propertiesTableContainer');
+      if (!data.length) {
+        container.innerHTML = '<div class="loading">No properties found. Click "Add New Property" to get started.</div>';
+        return;
+      }
+
+      let tableHtml = `<table class="admin-table"><thead><tr><th>Image</th><th>Title</th><th>Location</th><th>Beds</th><th>Baths</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead><tbody>`;
+      data.forEach(p => {
+        const imageUrl = p.image_data || DEFAULT_IMAGE;
+        tableHtml += `<tr>
+          <td><img src="${imageUrl}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;" onerror="this.src='${DEFAULT_IMAGE}'"></td>
+          <td><strong>${escapeHtml(p.title)}</strong></td>
+          <td>${escapeHtml(p.location)}</td>
+          <td>${p.bedrooms}</td>
+          <td>${p.bathrooms}</td>
+          <td>${escapeHtml(p.price)}</td>
+          <td><span class="status-badge status-${p.status}">${p.status}</span></td>
+          <td>
+            <button onclick="editProperty('${p.id}')" class="btn-edit">Edit</button>
+            <button onclick="showDeleteModal('${p.id}')" class="btn-delete">Delete</button>
+           </td>
+        </tr>`;
+      });
+      tableHtml += `</tbody></table>`;
+      container.innerHTML = tableHtml;
+    }
+
+    document.getElementById('searchInputAdmin')?.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      renderPropertiesTable(properties.filter(p => p.title.toLowerCase().includes(term) || p.location.toLowerCase().includes(term)));
+    });
+
+    document.getElementById('showAddPropertyBtn')?.addEventListener('click', () => {
+      isEditMode = false; selectedImageData = null;
+      document.getElementById('formTitle').textContent = 'Add New Property';
+      document.getElementById('submitPropertyBtn').innerHTML = 'Add Property <i class="fas fa-plus"></i>';
+      document.getElementById('propertyForm').reset();
+      document.getElementById('propertyId').value = '';
+      imagePreview.style.display = 'none';
+      uploadArea.style.display = 'block';
+      showPage('propertyFormPage');
+    });
+
+    document.getElementById('backToDashboardBtn')?.addEventListener('click', () => { showPage('adminDashboardPage'); loadAdminProperties(); });
+
+    window.editProperty = async (id) => {
+      isEditMode = true;
+      document.getElementById('formTitle').textContent = 'Edit Property';
+      document.getElementById('submitPropertyBtn').innerHTML = 'Update Property <i class="fas fa-save"></i>';
+      document.getElementById('propertyId').value = id;
+      const doc = await db.collection('properties').doc(id).get();
+      if (doc.exists) {
+        const p = doc.data();
+        document.getElementById('propTitle').value = p.title;
+        document.getElementById('propLocation').value = p.location;
+        document.getElementById('propBedrooms').value = p.bedrooms;
+        document.getElementById('propBathrooms').value = p.bathrooms;
+        document.getElementById('propArea').value = p.area;
+        document.getElementById('propPrice').value = p.price;
+        document.getElementById('propDescription').value = p.description || '';
+        document.getElementById('propStatus').value = p.status;
+        if (p.image_data && p.image_data !== DEFAULT_IMAGE) {
+          selectedImageData = p.image_data;
+          previewImg.src = p.image_data;
+          imagePreview.style.display = 'block';
+          uploadArea.style.display = 'none';
+        } else { uploadArea.style.display = 'block'; imagePreview.style.display = 'none'; }
+        showPage('propertyFormPage');
+      }
+    };
+
+    document.getElementById('propertyForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const propertyId = document.getElementById('propertyId').value;
+      const submitBtn = document.getElementById('submitPropertyBtn');
+      const originalText = submitBtn.innerHTML;
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+
+      if (!document.getElementById('propTitle').value || !document.getElementById('propLocation').value || !document.getElementById('propPrice').value) {
+        alert('Please fill in all required fields'); return;
+      }
+      if (!isEditMode && !selectedImageData) { alert('Please upload an image for the property'); return; }
+
+      const finalImage = selectedImageData || DEFAULT_IMAGE;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Processing...';
+      progressContainer.style.display = 'block';
+      progressBar.style.width = '30%';
+
+      try {
+        const propertyData = {
+          title: document.getElementById('propTitle').value,
+          location: document.getElementById('propLocation').value,
+          bedrooms: parseInt(document.getElementById('propBedrooms').value) || 0,
+          bathrooms: parseInt(document.getElementById('propBathrooms').value) || 0,
+          area: parseInt(document.getElementById('propArea').value) || 0,
+          price: document.getElementById('propPrice').value,
+          image_data: finalImage,
+          description: document.getElementById('propDescription').value || '',
+          status: document.getElementById('propStatus').value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        progressBar.style.width = '60%';
+
+        if (propertyId) {
+          await db.collection('properties').doc(propertyId).update(propertyData);
+        } else {
+          propertyData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          await db.collection('properties').add(propertyData);
+        }
+
+        progressBar.style.width = '100%';
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Done!';
+        const successMsg = document.getElementById('formSuccessMsg');
+        successMsg.textContent = propertyId ? '✓ Property updated successfully!' : '✓ Property added successfully!';
+        successMsg.style.display = 'block';
+
+        setTimeout(() => {
+          progressContainer.style.display = 'none';
+          progressBar.style.width = '0%';
+        }, 500);
+
+        setTimeout(() => {
+          showPage('adminDashboardPage');
+          loadAdminProperties();
+          // The properties page will auto-update via the real-time listener
+        }, 1000);
+
+      } catch (error) {
+        document.getElementById('formErrorMsg').textContent = 'Error: ' + error.message;
+        document.getElementById('formErrorMsg').style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        progressContainer.style.display = 'none';
+        progressBar.style.width = '0%';
+      }
+    });
+
+    window.showDeleteModal = (id) => { deleteId = id; document.getElementById('deleteModal').style.display = 'flex'; };
+    window.closeDeleteModal = function () { document.getElementById('deleteModal').style.display = 'none'; deleteId = null; };
+
+    document.getElementById('confirmDeleteBtn')?.addEventListener('click', async () => {
+      if (deleteId) {
+        await db.collection('properties').doc(deleteId).delete();
+        closeDeleteModal();
+        await loadAdminProperties();
+        // Properties page will auto-update via real-time listener
+      }
+    });
+
+    function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      showPage('homePage');
+      loadProperties();
+    });
+  </script>
+</body>
+
+</html>
